@@ -62,7 +62,7 @@ def submit_rule():
         # Commit and push to GitHub
         subprocess.run(['git', '-C', 'C:\dev\my_flask_api\streamsets_poc', 'add', RULES_DIR])
         subprocess.run(['git', '-C', 'C:\dev\my_flask_api\streamsets_poc', 'commit', '-m', 'Add new rule'])
-        subprocess.run(['git', '-C', 'C:\dev\my_flask_api\streamsets_poc', 'push', 'origin', 'master'])
+        subprocess.run(['git', '-C', 'C:\dev\my_flask_api\streamsets_poc', 'push', 'origin', 'main'])
 
         #Trigger Nifi data flow
         trigger_nifi_data_flow()
