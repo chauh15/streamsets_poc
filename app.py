@@ -24,14 +24,16 @@ def submit_rule():
             'rule_name': rule_name,
             # Add other rule attributes
         }
+        
+        os.makedirs(RULES_DIR, exist_ok=True) # ensure the directory exists
 
         with open(rule_filepath, 'w') as yaml_file:
             yaml.dump(rule_data, yaml_file, default_flow_style=False)
 
         # Commit and push to GitHub
-        subprocess.run(['git', '-C', '/path/to/your/repo', 'add', RULES_DIR])
-        subprocess.run(['git', '-C', '/path/to/your/repo', 'commit', '-m', 'Add new rule'])
-        subprocess.run(['git', '-C', '/path/to/your/repo', 'push', 'origin', 'master'])
+        subprocess.run(['git', '-C', 'C:\dev\my_flask_api\streamsets_poc', 'add', RULES_DIR])
+        subprocess.run(['git', '-C', 'C:\dev\my_flask_api\streamsets_poc', 'commit', '-m', 'Add new rule'])
+        subprocess.run(['git', '-C', 'C:\dev\my_flask_api\streamsets_poc', 'push', 'origin', 'master'])
 
         return jsonify({'message': 'Rule submitted successfully'})
     except Exception as e:
