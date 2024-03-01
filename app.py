@@ -8,7 +8,9 @@ app = Flask(__name__)
 RULES_DIR = 'rules'
 
 # NiFi REST API endpoint
-NIFI_API_URL = 'https://127.0.0.1:8443/nifi-api/flow/process-groups/f5f33e58-018d-1000-81a0-d3779ee98fdc/controller-services/f623965c-018d-1000-0436-27b74699a9e3/references'
+#NIFI_API_URL = 'https://127.0.0.1:8443/nifi-api/flow/process-groups/f5f33e58-018d-1000-81a0-d3779ee98fdc/controller-services/f623965c-018d-1000-0436-27b74699a9e3/references'
+#NIFI_API_URL = 'https://127.0.0.1:8443/nifi-api/flow/process-groups/f5f33e58-018d-1000-81a0-d3779ee98fdc/run-status'
+NIFI_API_URL = 'https://127.0.0.1:8443/nifi'
 NIFI_USERNAME = '08a8e122-db91-46fb-bb51-5d52ce46903e'
 NIFI_PASSWORD = '0KmYvZZtvWTehLS2bBRESxJrTM8U57zT'
 
@@ -25,11 +27,12 @@ def trigger_nifi_data_flow():
 
     # Customize the payload based on your NiFi setup
     payload = {
-        'uri': 'https://127.0.0.1:8443/nifi-api/flow/process-groups/f5f33e58-018d-1000-81a0-d3779ee98fdc/controller-services/f623965c-018d-1000-0436-27b74699a9e3/references',
+        'uri': 'https://127.0.0.1:8443/nifi-api/flow/process-groups/f5f33e58-018d-1000-81a0-d3779ee98fdc/run-status',
         'method': 'POST'
     }
 
-    response = requests.post(NIFI_API_URL, json=payload, headers=headers, auth=auth, verify=False)
+    #response = requests.post(NIFI_API_URL, json=payload, headers=headers, auth=auth, verify=False)
+    response = requests.post(NIFI_API_URL, verify=False)
 
     if response.status_code == 200:
         print("NiFi data flow triggered successfully.")
@@ -66,6 +69,9 @@ def submit_rule():
 
         #Trigger Nifi data flow
         trigger_nifi_data_flow()
+        
+        #Trigger StreamSets pipeline
+        #trigger_streamsets_pipeline('pipeline_name')
 
         return jsonify({'message': 'Rule submitted successfully'})
     except Exception as e:
@@ -74,3 +80,32 @@ def submit_rule():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+'''
+
+# Streamsets REST API endpoint and token
+STREAMSETS_API_URL = 'http://localhost:18630/rest/v1/pipeline/start'
+STREAMSETS_API_TOKEN = 'api_token'
+
+def trigger_streamsets_pipeline(pipeline_name):
+    headers = {
+        'Content-Type': 'application/json',
+        'X-Requested-By': 'SDC',
+        'Authorization': f'Bearer {StreamSets_API_TOKEN}'
+    }
+    payload = {'pipeline': pipeline_name}
+    
+    response = requests.post(STREAMSETS_API_URL, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        print(f"Pipeline '{pipeline_name}' triggered successfully.")
+    else:
+        print(f"Error triggering pipeline: {response.text}")
+        
+if __name__ == '__main__':
+    # Replace 'pipeline_name' with the actual name of Streamsets pipeline
+    trigger_streamsets_pipeline('pipeline_name')
+
+'''
